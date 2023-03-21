@@ -1,8 +1,12 @@
 let form = document.getElementById('form')
-
 form.addEventListener('submit',onSubmit)
 
+// select and applay listener for del button
+let items = document.getElementById('items')
+items.addEventListener('click',delItem)
+
 let count = 0;
+
 function onSubmit(e){
     e.preventDefault()
     let name =  document.getElementById('name').value
@@ -11,7 +15,7 @@ function onSubmit(e){
     // create error msg 
     let p = document.createElement('p')
     p.appendChild(document.createTextNode('please enter value'))
-
+  
     // create users itemlist
     let ul = document.getElementById('items')
     ul.style.listStyle = 'none'
@@ -27,7 +31,12 @@ function onSubmit(e){
    {
     // add current user in page
     let li = document.createElement('li')
-    li.appendChild(document.createTextNode(`${name} : ${email} - ${phone}`))
+    li.appendChild(document.createTextNode(`${name} :- ${email} :- ${phone}`))
+      // craete delete button 
+  let delBtn = document.createElement('button')
+  delBtn.appendChild(document.createTextNode('x'))
+  delBtn.setAttribute('class','delbtn float-right mb-1')
+    li.appendChild(delBtn)
     ul.appendChild(li)
 
     // add curent user as object in local storege
@@ -56,7 +65,25 @@ if(count == 0){
     let phone = data.phone;
     let ul = document.getElementById('items')
     let li = document.createElement('li')
-    li.appendChild(document.createTextNode(`${name} : ${email} - ${phone}`))
+    let delBtn = document.createElement('button')
+  delBtn.appendChild(document.createTextNode('x'))
+  delBtn.setAttribute('class','delbtn float-right mb-1')
+    li.appendChild(delBtn)
+    li.appendChild(document.createTextNode(`${name} :- ${email} :- ${phone}`))
     ul.appendChild(li) 
+  }
+}
+
+// delete item
+function delItem(e){
+  e.preventDefault();
+  if(e.target.getAttribute('class') == 'delbtn float-right mb-1')
+  {
+    let curNode = e.target.parentElement;
+    // remove from local storage
+    let emailKey = curNode.textContent.split(':-')[1].trim()
+    localStorage.removeItem(emailKey)
+     // remove from page 
+     curNode.remove()
   }
 }
