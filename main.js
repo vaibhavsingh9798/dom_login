@@ -4,6 +4,7 @@ form.addEventListener('submit',onSubmit)
 // select and applay listener for del button
 let items = document.getElementById('items')
 items.addEventListener('click',delItem)
+items.addEventListener('click',editItem)
 
 let count = 0;
 
@@ -39,6 +40,11 @@ function onSubmit(e){
     li.appendChild(delBtn)
     ul.appendChild(li)
 
+    // create  edit button 
+       let editBtn = document.createElement('button')
+       editBtn.appendChild(document.createTextNode('edit'))
+       editBtn.setAttribute('class','edit float-right mr-1')
+       li.appendChild(editBtn)
     // add curent user as object in local storege
    
      let objName = {name,email,phone}
@@ -54,6 +60,8 @@ function onSubmit(e){
      document.getElementById('phone').value=''
  
 }
+
+// get element from local storage if refresh page
 if(count == 0){
   for(let i=1;i<10;i++){
     let key = localStorage.key(i)
@@ -71,6 +79,12 @@ if(count == 0){
     li.appendChild(delBtn)
     li.appendChild(document.createTextNode(`${name} :- ${email} :- ${phone}`))
     ul.appendChild(li) 
+
+    // add edit button
+     let editBtn = document.createElement('button')
+       editBtn.appendChild(document.createTextNode('edit'))
+       editBtn.setAttribute('class','edit float-right mr-1')
+       li.appendChild(editBtn)
   }
 }
 
@@ -85,5 +99,34 @@ function delItem(e){
     localStorage.removeItem(emailKey)
      // remove from page 
      curNode.remove()
+  }
+}
+
+ // edit item 
+function editItem(e){
+  e.preventDefault();
+  if(e.target.getAttribute('class') == 'edit float-right mr-1')
+  {
+      
+    let curNode = e.target.parentElement;
+    // get key 
+    let emailKey = curNode.textContent.split(':-')[1].trim()
+    // get data from local storage
+     let data = JSON.parse(localStorage.getItem(emailKey))
+     let name = data.name;
+     let email = data.email;
+     let phone = data.phone;
+     console.log(name,email,phone)
+
+     // set data to input field
+     document.getElementById('name').value=name;
+     document.getElementById('email').value=email;
+     document.getElementById('phone').value=phone;
+
+     // remove from local storage
+    localStorage.removeItem(emailKey)
+     // remove from page 
+     curNode.remove()
+  
   }
 }
