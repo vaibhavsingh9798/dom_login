@@ -28,11 +28,16 @@ function onSubmit(e){
     li.appendChild(document.createTextNode(`${name} : ${email}`))
     ul.appendChild(li)
 
-    // add curent user in local storege
-     localStorage.setItem(`${name}`,`${name}:${email}`)
-     console.log(localStorage.getItem(name))
+    // add curent user as object in local storege
+   
+     let objName = {name,email}
+    // convert object to string then store
+     localStorage.setItem(`${name}`,JSON.stringify(objName))
+     // convert string to object then print
+     console.log( JSON.parse(localStorage.getItem(name)))
 
    }
+   
 
    document.getElementById('name').value=''
      document.getElementById('email').value=''
